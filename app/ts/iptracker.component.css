@@ -4,7 +4,7 @@
     background: url("../images/pattern-bg.png");
     color: #fff;
     margin-top: -30px;
-    
+
 }
 
 .headingImage>h4 {
@@ -100,7 +100,8 @@ p {
         margin-left: 10% !important;
     }
 
-    .card-body>p, .card-body>h4{
+    .card-body>p,
+    .card-body>h4 {
         text-align: center;
     }
 

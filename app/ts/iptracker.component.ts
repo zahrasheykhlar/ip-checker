@@ -52,9 +52,9 @@ export class IpTrackerComponent implements OnInit {
     }
 
     private setLocation(num: any) {
-        if (localStorage.getItem(num)){
+        if (localStorage.getItem(num)) {
             this.location = JSON.parse(localStorage.getItem(num));
-            this.showMap( this.location.latitude,  this.location.longitude);
+            this.showMap(this.location.latitude, this.location.longitude);
         }
         else {
             this._httpService.getLocationByIp(num).subscribe(res => {

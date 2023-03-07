@@ -1,3 +1,4 @@
+// could also be just an interface
 export class Location {
     id: number;
     ipaddress: string;

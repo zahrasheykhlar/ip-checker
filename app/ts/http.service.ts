@@ -1,7 +1,5 @@
 import { Injectable } from 'angular2/core';
 import { Http, Headers } from 'angular2/http';
-import { Observable } from 'rxjs';
-
 
 @Injectable()
 export class HTTPService {
@@ -23,7 +21,7 @@ export class HTTPService {
     getLocationByIp(ip) {
         let url = this.API_URL + ip;
         return this.http.get(url, {
-            headers : this.headers
+            headers: this.headers
         });
     }
 }
