@@ -47,7 +47,6 @@ export class IpTrackerComponent implements OnInit {
 
     onSub(searchIP) {
         if (searchIP) {
-            this.location.ipaddress = searchIP;
             this.setLocation(searchIP);
         }
     }
