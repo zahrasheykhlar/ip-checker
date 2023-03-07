@@ -1,33 +1,29 @@
-
 import { Injectable } from 'angular2/core';
-import { Http } from 'angular2/http';
+import { Http, Headers } from 'angular2/http';
 import { Observable } from 'rxjs';
 
 
 @Injectable()
 export class HTTPService {
-  constructor(private http: Http) {}
+    private headers: Headers = new Headers({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer WookieIP2022'
+    });
 
-  getIpAddress() {
-    return this.http
-      .get('https://api.ipify.org/?format=json');
-  }
+    private API_URL: string = 'https://wookie.codesubmit.io/ipcheck?ip=';
 
-//   getGEOLocation(ip) {
-//     let url =
-//       'https://geo.ipify.org/api/v1?apiKey=at_7HteoFbDN1yZXCHt3PaZvOozsI8v4&domain=' +
-//       ip;
-//     return this.http.get(url).pipe(catchError(this.handleError));
-//   }
+    constructor(private http: Http) { }
 
-//   private handleError(error: HttpErrorResponse) {
-//     if (error.error instanceof ErrorEvent) {
-//       console.error('An error occurred:', error.error.message);
-//     } else {
-//       console.error(
-//         `Backend returned code ${error.status}, ` + `body was: ${error.error}`
-//       );
-//     }
-//     return throwError('Something bad happened; please try again later.');
-//   }
+    getIpAddress() {
+        return this.http
+            .get('https://api.ipify.org/?format=json');
+    }
+
+    getLocationByIp(ip) {
+        let url = this.API_URL + ip;
+        return this.http.get(url, {
+            headers : this.headers
+        });
+    }
 }

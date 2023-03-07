@@ -19,44 +19,67 @@ export class IpTrackerComponent implements OnInit {
     search: string = '';
     location: Location;
     constructor(private _httpService: HTTPService) {
-
+     this.location = new Location(1,'','','','',0,0,0,'','','');
     }
-    private leafMap() {
-        var container = L.DomUtil.get('map');
 
-        const map = L.map('map').setView([this.location.latitude, this.location.longitude], 16);
+    private showMap(lat: number, lng: number) {
+        if (lat && lng) {
+            var container = L.DomUtil.get('map');
+            if (container != null) {
+                container._leaflet_id = null;
+            }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+            const map = L.map('map').setView([lat, lng], 16);
 
-        map.zoomControl.remove();
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
 
-        var marker = L.marker([this.location.latitude, this.location.longitude], {
-            icon: L.icon({
-                iconUrl: '../images/icon-location.svg'
-            }),
-        }).addTo(map);
+            map.zoomControl.remove();
+
+            var marker = L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: '../images/icon-location.svg'
+                }),
+            }).addTo(map);
+        }
     }
-    ngOnInit() {
-        this.location = new Location(1,
-            "8.8.8.8",
-            "Google LLC",
-            "Mountain View",
-            "US",
-            5375480,
-            37.38605,
-            -122.08385,
-            "94035",
-            "California",
-            "-07:00");
-        this._httpService.getIpAddress().subscribe(res => {
-            console.log(res['_body']);
-            let body = JSON.parse(res['_body'])
-            if (body)
-                this.location.ipaddress = body.ip;
+
+    onSub(searchIP) {
+        if(searchIP){
+            this.location.ipaddress = searchIP;
+            this.setLocation(searchIP);
+        }
+    }
+
+    private setLocation(num: any) {
+        this._httpService.getLocationByIp(num).subscribe(res => {
+            let body = JSON.parse(res['_body']);
+            if (body) {
+                this.location.ipaddress = num;
+                this.location.isp = body.isp;
+                this.location.city = body.location.city;
+                this.location.country = body.location.country;
+                this.location.geonameId = body.location.geonameId;
+                this.location.latitude = body.location.latitude;
+                this.location.longitude = body.location.longitude;
+                this.location.postalCode = body.location.postalCode;
+                this.location.region = body.location.region;
+                this.location.timezone = body.location.timezone;
+           
+                this.showMap(body.location.lat, body.location.lng);
+            }
         });
-        this.leafMap();
+    }
+
+    ngOnInit() {
+        this._httpService.getIpAddress().subscribe(res => {
+            let body = JSON.parse(res['_body'])
+            if (body) {
+                this.location.ipaddress = body.ip;
+                this.setLocation(this.location.ipaddress)
+            }
+        });
     }
 
 
