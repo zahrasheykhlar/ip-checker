@@ -19,7 +19,7 @@ export class IpTrackerComponent implements OnInit {
     search: string = '';
     location: Location;
     constructor(private _httpService: HTTPService) {
-     this.location = new Location(1,'','','','',0,0,0,'','','');
+        this.location = new Location(1, '', '', '', '', 0, 0, 0, '', '', '');
     }
 
     private showMap(lat: number, lng: number) {
@@ -46,33 +46,43 @@ export class IpTrackerComponent implements OnInit {
     }
 
     onSub(searchIP) {
-        if(searchIP){
+        if (searchIP) {
             this.location.ipaddress = searchIP;
             this.setLocation(searchIP);
         }
     }
 
     private setLocation(num: any) {
-        this._httpService.getLocationByIp(num).subscribe(res => {
-            let body = JSON.parse(res['_body']);
-            if (body) {
-                this.location.ipaddress = num;
-                this.location.isp = body.isp;
-                this.location.city = body.location.city;
-                this.location.country = body.location.country;
-                this.location.geonameId = body.location.geonameId;
-                this.location.latitude = body.location.latitude;
-                this.location.longitude = body.location.longitude;
-                this.location.postalCode = body.location.postalCode;
-                this.location.region = body.location.region;
-                this.location.timezone = body.location.timezone;
-           
-                this.showMap(body.location.lat, body.location.lng);
-            }
-        });
+        if (localStorage.getItem(num)){
+            this.location = JSON.parse(localStorage.getItem(num));
+            this.showMap( this.location.latitude,  this.location.longitude);
+        }
+        else {
+            this._httpService.getLocationByIp(num).subscribe(res => {
+                let body = JSON.parse(res['_body']);
+                if (body) {
+                    this.location.ipaddress = num;
+                    this.location.isp = body.isp;
+                    this.location.city = body.location.city;
+                    this.location.country = body.location.country;
+                    this.location.geonameId = body.location.geonameId;
+                    this.location.latitude = body.location.lat;
+                    this.location.longitude = body.location.lng;
+                    this.location.postalCode = body.location.postalCode;
+                    this.location.region = body.location.region;
+                    this.location.timezone = body.location.timezone;
+
+                    this.showMap(body.location.lat, body.location.lng);
+
+                    localStorage.setItem(num, JSON.stringify(this.location));
+                }
+            });
+        }
+
     }
 
     ngOnInit() {
+        // localStorage.clear();
         this._httpService.getIpAddress().subscribe(res => {
             let body = JSON.parse(res['_body'])
             if (body) {
