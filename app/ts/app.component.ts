@@ -11,19 +11,7 @@ import { IpTrackerComponent } from './iptracker.component';
 })
 
 export class AppComponent {
-    location: Location;
-
     constructor(){
-        this.location = new Location(1,
-             "8.8.8.8", 
-             "Google LLC", 
-             "Mountain View",
-             "US",
-             5375480,
-             37.38605,
-             -122.08385,
-             "94035",
-             "California",
-             "-08:00")
+       
     }
 }

@@ -60,6 +60,7 @@
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
+    z-index: 99999;
 }
 
 .card-body {
