@@ -1,7 +1,6 @@
 import { Component } from 'angular2/core';
-
-import { Location } from './location';
 import { IpTrackerComponent } from './iptracker.component';
+import { HTTP_PROVIDERS, Http } from 'angular2/http';
 
 @Component({
     selector: 'my-app',
@@ -11,7 +10,5 @@ import { IpTrackerComponent } from './iptracker.component';
 })
 
 export class AppComponent {
-    constructor(){
-       
-    }
+    constructor(){}
 }
